@@ -25,6 +25,9 @@
     "rules": {
         "prettier/prettier": "error",
         "@typescript-eslint/camelcase": "off",
+        "@typescript-eslint/no-unused-vars": ["error", {
+            "argsIgnorePattern": "_next"
+        }],
         "class-methods-use-this": "off",
         "indent": ["error", 4],
         "import/extensions": [
