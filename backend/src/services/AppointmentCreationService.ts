@@ -8,7 +8,7 @@ interface RequestDTO {
     date: Date;
 }
 
-class CreateAppointmentService {
+class AppointmentCreationService {
     public async execute({
         provider_id,
         date,
@@ -38,4 +38,4 @@ class CreateAppointmentService {
     }
 }
 
-export default CreateAppointmentService;
+export default AppointmentCreationService;
