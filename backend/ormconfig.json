@@ -3,8 +3,8 @@
     "host": "localhost",
     "port": 5432,
     "username": "postgres",
-    "password": "gostackdb",
-    "database": "gobarber_ts",
+    "password": "postgres",
+    "database": "gobarber",
     "entities": [
         "./src/models/*.ts"
     ],
