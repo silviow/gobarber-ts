@@ -1,7 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FiLogIn } from 'react-icons/fi';
-import { Container, Content, Background } from './styles';
+import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
+import { Container, Content, BackgroundImage } from './styles';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+import CustomLink from '../../components/CustomLink';
+import BackgroundText from '../../components/BackgroundText';
 import logoImg from '../../assets/logo.svg';
 
 const Login: React.FC = () => {
@@ -9,26 +12,29 @@ const Login: React.FC = () => {
         <Container>
             <Content>
                 <img src={logoImg} alt="GoBarber" />
-                <span>
-                    go
-                    <br />
-                    bar
-                    <br />
-                    ber
-                </span>
+                <BackgroundText />
                 <form>
                     <h1>Welcome</h1>
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
-                    <button type="submit">Login</button>
-                    <Link to="/forgot">I forgot my password</Link>
+                    <Input
+                        name="email"
+                        type="email"
+                        icon={FiMail}
+                        placeholder="Email"
+                    />
+                    <Input
+                        name="password"
+                        type="password"
+                        icon={FiLock}
+                        placeholder="Password"
+                    />
+                    <Button type="submit">Login</Button>
+                    <CustomLink to="/forgot">I forgot my password</CustomLink>
                 </form>
-                <Link to="/register">
-                    <FiLogIn size={20} color="#fff" />
+                <CustomLink to="/register" icon={FiLogIn} iconSize={20}>
                     Create an account
-                </Link>
+                </CustomLink>
             </Content>
-            <Background />
+            <BackgroundImage />
         </Container>
     );
 };

@@ -43,7 +43,10 @@
                 "tsx": "never"
             }
         ],
-        "react/jsx-indent": [ "warn", 4 ]
+        "react/jsx-indent": [ "warn", 4 ],
+        "react/jsx-indent-props": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react/prop-types": "off"
     },
     "settings": {
         "import/resolver": {
