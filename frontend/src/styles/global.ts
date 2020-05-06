@@ -9,14 +9,14 @@ export default createGlobalStyle`
     }
 
     body {
-        background: #0f0f0f;
         -webkit-font-smoothing: antialiased;
+        background: linear-gradient(to top, #000, #090909);
     }
 
     body, input, button {
         color: #fff;
         font-size: 16px;
-        font-family: 'Roboto' sans-serif;
+        font-family: 'Roboto', sans-serif;
     }
 
     button {
