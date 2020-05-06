@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import backgroundImg from '../../assets/login_background.jpg';
+import backgroundImg from '../../assets/register_background.jpg';
 
 export const Container = styled.div`
     height: 100vh;
@@ -31,10 +31,6 @@ export const Content = styled.div`
 
         h1 {
             margin-bottom: 25px;
-        }
-
-        button {
-            margin-bottom: 28px;
         }
 
         a {

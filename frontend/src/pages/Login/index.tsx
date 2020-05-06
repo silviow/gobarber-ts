@@ -15,12 +15,7 @@ const Login: React.FC = () => {
                 <BackgroundText />
                 <form>
                     <h1>Welcome</h1>
-                    <Input
-                        name="email"
-                        type="email"
-                        icon={FiMail}
-                        placeholder="Email"
-                    />
+                    <Input name="email" icon={FiMail} placeholder="Email" />
                     <Input
                         name="password"
                         type="password"
