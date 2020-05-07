@@ -1,6 +1,14 @@
-import styled from 'styled-components';
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import styled, { css } from 'styled-components';
+import Tooltip from '../Tooltip';
 
-export const Container = styled.div`
+interface ContainerProps {
+    isErrored: boolean;
+    isFocused: boolean;
+    isFilled: boolean;
+}
+
+export const Container = styled.div<ContainerProps>`
     width: 100%;
     height: 58px;
     display: flex;
@@ -14,6 +22,25 @@ export const Container = styled.div`
     & + div {
         margin-top: 10px;
     }
+
+    ${(props) =>
+        props.isErrored &&
+        css`
+            border-color: #dd1c1a;
+        `}
+
+    ${(props) =>
+        props.isFocused &&
+        css`
+            color: #fff;
+            border-color: #999591;
+        `}
+
+    ${(props) =>
+        props.isFilled &&
+        css`
+            color: #fff;
+        `}
 
     svg {
         margin-right: 10px;
@@ -40,5 +67,14 @@ export const Container = styled.div`
             box-shadow: 0 0 0px 1000px transparent inset;
             transition: background-color 5000s ease-in-out 0s;
         }
+    }
+`;
+
+export const InputError = styled(Tooltip)`
+    height: 18px;
+    margin-left: 10px;
+
+    svg {
+        margin: 0;
     }
 `;
