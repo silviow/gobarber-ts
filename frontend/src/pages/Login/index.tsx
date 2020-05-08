@@ -8,7 +8,8 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import CustomLink from '../../components/CustomLink';
 import BackgroundText from '../../components/BackgroundText';
-import { useAuth } from '../../hooks/AuthContext';
+import { useAuth } from '../../hooks/Auth';
+import { useToast } from '../../hooks/Toast';
 import getValidationErrors from '../../utils/getValidationErrors';
 import logoImg from '../../assets/logo.svg';
 
@@ -21,6 +22,7 @@ const Login: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
 
     const { login } = useAuth();
+    const { addToast } = useToast();
 
     const handleSubmit = useCallback(
         async (data: LoginFormData) => {
@@ -40,17 +42,25 @@ const Login: React.FC = () => {
                     abortEarly: false,
                 });
 
-                login({
+                await login({
                     email: data.email,
                     password: data.password,
                 });
             } catch (error) {
-                const errors = getValidationErrors(error);
+                if (error instanceof Yup.ValidationError) {
+                    const errors = getValidationErrors(error);
 
-                formRef.current?.setErrors(errors);
+                    formRef.current?.setErrors(errors);
+                } else {
+                    addToast({
+                        type: 'error',
+                        title: 'Something went wrong',
+                        description: "Couldn't login",
+                    });
+                }
             }
         },
-        [login],
+        [login, addToast],
     );
 
     return (

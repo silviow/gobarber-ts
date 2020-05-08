@@ -8,35 +8,49 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import CustomLink from '../../components/CustomLink';
 import BackgroundText from '../../components/BackgroundText';
+import { useToast } from '../../hooks/Toast';
 import getValidationErrors from '../../utils/getValidationErrors';
 import logoImg from '../../assets/logo.svg';
 
 const Register: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
 
-    const handleSubmit = useCallback(async (data: object) => {
-        try {
-            formRef.current?.setErrors({});
+    const { addToast } = useToast();
 
-            const schema = Yup.object().shape({
-                name: Yup.string().required('You must enter a name'),
-                email: Yup.string()
-                    .required('You must enter an email')
-                    .email('Invalid email format'),
-                password: Yup.string()
-                    .required('You must enter a password')
-                    .min(8, 'Password must be at least 8 characters'),
-            });
+    const handleSubmit = useCallback(
+        async (data: object) => {
+            try {
+                formRef.current?.setErrors({});
 
-            await schema.validate(data, {
-                abortEarly: false,
-            });
-        } catch (error) {
-            const errors = getValidationErrors(error);
+                const schema = Yup.object().shape({
+                    name: Yup.string().required('You must enter a name'),
+                    email: Yup.string()
+                        .required('You must enter an email')
+                        .email('Invalid email format'),
+                    password: Yup.string()
+                        .required('You must enter a password')
+                        .min(8, 'Password must be at least 8 characters'),
+                });
 
-            formRef.current?.setErrors(errors);
-        }
-    }, []);
+                await schema.validate(data, {
+                    abortEarly: false,
+                });
+            } catch (error) {
+                if (error instanceof Yup.ValidationError) {
+                    const errors = getValidationErrors(error);
+
+                    formRef.current?.setErrors(errors);
+                } else {
+                    addToast({
+                        type: 'error',
+                        title: 'Something went wrong',
+                        description: "Couldn't create an account",
+                    });
+                }
+            }
+        },
+        [addToast],
+    );
 
     return (
         <Container>
