@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import backgroundImg from '../../assets/register_background.jpg';
+import { appear, appearFromLeft } from '../../styles/animations';
 
 export const Container = styled.div`
     height: 100vh;
@@ -14,6 +15,7 @@ export const Content = styled.div`
     align-items: center;
     place-content: center;
     flex-direction: column;
+    animation: ${appearFromLeft} 1s;
 
     img {
         z-index: 2;
@@ -45,4 +47,5 @@ export const BackgroundImage = styled.div`
     z-index: 2;
     background: url(${backgroundImg}) no-repeat center;
     background-size: cover;
+    animation: ${appear} 1s;
 `;
