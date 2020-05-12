@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
     KeyboardAvoidingView,
     Platform,
@@ -6,6 +6,9 @@ import {
     Image,
     View,
 } from 'react-native';
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
+import { useNavigation } from '@react-navigation/native';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import {
@@ -18,6 +21,14 @@ import logoImg from '../../assets/logo.png';
 import BackgroundText from '../../components/BackgroundText';
 
 const Login: React.FC = () => {
+    const formRef = useRef<FormHandles>(null);
+
+    const navigation = useNavigation();
+
+    const handleLogin = useCallback((data: object) => {
+        console.log(data);
+    }, []);
+
     return (
         <KeyboardAvoidingView
             enabled
@@ -25,7 +36,7 @@ const Login: React.FC = () => {
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
             <ScrollView
-                contentContainerStyle={{ minHeight: '100%' }}
+                contentContainerStyle={{ flex: 1 }}
                 keyboardShouldPersistTaps="handled"
             >
                 <Container>
@@ -34,15 +45,21 @@ const Login: React.FC = () => {
                     <View>
                         <Title>Welcome</Title>
                     </View>
-                    <Input name="email" icon="mail" placeholder="Email" />
-                    <Input name="password" icon="lock" placeholder="Password" />
-                    <Button
-                        onPress={(): void => {
-                            console.log('"Login" pressed');
-                        }}
-                    >
-                        Login
-                    </Button>
+                    <Form ref={formRef} onSubmit={handleLogin}>
+                        <Input name="email" icon="mail" placeholder="Email" />
+                        <Input
+                            name="password"
+                            icon="lock"
+                            placeholder="Password"
+                        />
+                        <Button
+                            onPress={(): void => {
+                                formRef.current?.submitForm();
+                            }}
+                        >
+                            Login
+                        </Button>
+                    </Form>
                     <ForgotPasswordLink
                         fontSize="17px"
                         onPress={(): void => {
@@ -55,9 +72,7 @@ const Login: React.FC = () => {
                         icon="log-in"
                         color="#fff"
                         fontSize="19px"
-                        onPress={(): void => {
-                            console.log('"Create an account" pressed');
-                        }}
+                        onPress={(): void => navigation.navigate('Register')}
                     >
                         Create an account
                     </CreateAccountLink>
