@@ -5,6 +5,7 @@ import {
     ScrollView,
     Image,
     View,
+    TextInput,
 } from 'react-native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
@@ -22,6 +23,7 @@ import BackgroundText from '../../components/BackgroundText';
 
 const Login: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
+    const passwordInputRef = useRef<TextInput>(null);
 
     const navigation = useNavigation();
 
@@ -46,11 +48,27 @@ const Login: React.FC = () => {
                         <Title>Welcome</Title>
                     </View>
                     <Form ref={formRef} onSubmit={handleLogin}>
-                        <Input name="email" icon="mail" placeholder="Email" />
                         <Input
+                            name="email"
+                            icon="mail"
+                            placeholder="Email"
+                            autoCapitalize="none"
+                            keyboardType="email-address"
+                            returnKeyType="next"
+                            onSubmitEditing={(): void => {
+                                passwordInputRef.current?.focus();
+                            }}
+                        />
+                        <Input
+                            ref={passwordInputRef}
                             name="password"
                             icon="lock"
                             placeholder="Password"
+                            secureTextEntry
+                            returnKeyType="send"
+                            onSubmitEditing={(): void => {
+                                formRef.current?.submitForm();
+                            }}
                         />
                         <Button
                             onPress={(): void => {

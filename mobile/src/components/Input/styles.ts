@@ -1,7 +1,12 @@
-import styled from 'styled-components/native';
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import styled, { css } from 'styled-components/native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-export const Container = styled.View`
+interface ContainerProps {
+    isFocused: boolean;
+}
+
+export const Container = styled.View<ContainerProps>`
     z-index: 2;
     width: 100%;
     height: 60px;
@@ -11,6 +16,14 @@ export const Container = styled.View`
     margin-bottom: 10px;
     flex-direction: row;
     align-items: center;
+    border-width: 2px;
+    border-color: #131214;
+
+    ${(props) =>
+        props.isFocused &&
+        css`
+            border-color: #ccc; /* #999591 */
+        `}
 `;
 
 export const Icon = styled(FeatherIcon)`
