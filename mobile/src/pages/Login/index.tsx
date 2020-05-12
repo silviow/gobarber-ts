@@ -6,20 +6,28 @@ import {
     Image,
     View,
     TextInput,
+    Alert,
 } from 'react-native';
+import * as Yup from 'yup';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { useNavigation } from '@react-navigation/native';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import BackgroundText from '../../components/BackgroundText';
+import getValidationErrors from '../../utils/getValidationErrors';
+import logoImg from '../../assets/logo.png';
 import {
     Container,
     Title,
     ForgotPasswordLink,
     CreateAccountLink,
 } from './styles';
-import logoImg from '../../assets/logo.png';
-import BackgroundText from '../../components/BackgroundText';
+
+interface LoginFormData {
+    email: string;
+    password: string;
+}
 
 const Login: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
@@ -27,8 +35,36 @@ const Login: React.FC = () => {
 
     const navigation = useNavigation();
 
-    const handleLogin = useCallback((data: object) => {
-        console.log(data);
+    const handleLogin = useCallback(async (data: LoginFormData) => {
+        try {
+            formRef.current?.setErrors({});
+
+            const schema = Yup.object().shape({
+                email: Yup.string()
+                    .required('You must enter an email')
+                    .email('Invalid email format'),
+                password: Yup.string().required('You must enter a password'),
+            });
+
+            await schema.validate(data, {
+                abortEarly: false,
+            });
+
+            // await login({
+            //     email: data.email,
+            //     password: data.password,
+            // });
+
+            // history.push('/dashboard');
+        } catch (error) {
+            if (error instanceof Yup.ValidationError) {
+                const errors = getValidationErrors(error);
+
+                formRef.current?.setErrors(errors);
+            } else {
+                Alert.alert('Something went wrong', "Couldn't login");
+            }
+        }
     }, []);
 
     return (
