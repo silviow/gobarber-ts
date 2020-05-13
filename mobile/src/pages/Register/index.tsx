@@ -17,6 +17,7 @@ import Button from '../../components/Button';
 import BackgroundText from '../../components/BackgroundText';
 import getValidationErrors from '../../utils/getValidationErrors';
 import { Container, Title, ReturnToLoginLink } from './styles';
+import { api } from '../../services/api';
 import logoImg from '../../assets/logo.png';
 
 interface RegisterFormData {
@@ -32,42 +33,45 @@ const Register: React.FC = () => {
 
     const navigation = useNavigation();
 
-    const handleRegister = useCallback(async (data: RegisterFormData) => {
-        try {
-            formRef.current?.setErrors({});
+    const handleRegister = useCallback(
+        async (data: RegisterFormData) => {
+            try {
+                formRef.current?.setErrors({});
 
-            const schema = Yup.object().shape({
-                name: Yup.string().required('You must enter a name'),
-                email: Yup.string()
-                    .required('You must enter an email')
-                    .email('Invalid email format'),
-                password: Yup.string()
-                    .required('You must enter a password')
-                    .min(8, 'Password must be at least 8 characters'),
-            });
+                const schema = Yup.object().shape({
+                    name: Yup.string().required('You must enter a name'),
+                    email: Yup.string()
+                        .required('You must enter an email')
+                        .email('Invalid email format'),
+                    password: Yup.string()
+                        .required('You must enter a password')
+                        .min(8, 'Password must be at least 8 characters'),
+                });
 
-            await schema.validate(data, {
-                abortEarly: false,
-            });
+                await schema.validate(data, {
+                    abortEarly: false,
+                });
 
-            // await api.post('/users', data);
+                await api.post('/users', data);
 
-            // history.push('/');
+                navigation.navigate('Login');
 
-            Alert.alert('Welcome!', 'Account successfully created :)');
-        } catch (error) {
-            if (error instanceof Yup.ValidationError) {
-                const errors = getValidationErrors(error);
+                Alert.alert('Welcome!', 'Account successfully created :)');
+            } catch (error) {
+                if (error instanceof Yup.ValidationError) {
+                    const errors = getValidationErrors(error);
 
-                formRef.current?.setErrors(errors);
-            } else {
-                Alert.alert(
-                    'Something went wrong',
-                    "Couldn't create an account",
-                );
+                    formRef.current?.setErrors(errors);
+                } else {
+                    Alert.alert(
+                        'Something went wrong',
+                        "Couldn't create an account",
+                    );
+                }
             }
-        }
-    }, []);
+        },
+        [navigation],
+    );
 
     return (
         <KeyboardAvoidingView

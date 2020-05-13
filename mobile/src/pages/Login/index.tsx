@@ -16,6 +16,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import BackgroundText from '../../components/BackgroundText';
 import getValidationErrors from '../../utils/getValidationErrors';
+import { useAuth } from '../../hooks/Auth';
 import logoImg from '../../assets/logo.png';
 import {
     Container,
@@ -35,37 +36,42 @@ const Login: React.FC = () => {
 
     const navigation = useNavigation();
 
-    const handleLogin = useCallback(async (data: LoginFormData) => {
-        try {
-            formRef.current?.setErrors({});
+    const { login } = useAuth();
 
-            const schema = Yup.object().shape({
-                email: Yup.string()
-                    .required('You must enter an email')
-                    .email('Invalid email format'),
-                password: Yup.string().required('You must enter a password'),
-            });
+    const handleLogin = useCallback(
+        async (data: LoginFormData) => {
+            try {
+                formRef.current?.setErrors({});
 
-            await schema.validate(data, {
-                abortEarly: false,
-            });
+                const schema = Yup.object().shape({
+                    email: Yup.string()
+                        .required('You must enter an email')
+                        .email('Invalid email format'),
+                    password: Yup.string().required(
+                        'You must enter a password',
+                    ),
+                });
 
-            // await login({
-            //     email: data.email,
-            //     password: data.password,
-            // });
+                await schema.validate(data, {
+                    abortEarly: false,
+                });
 
-            // history.push('/dashboard');
-        } catch (error) {
-            if (error instanceof Yup.ValidationError) {
-                const errors = getValidationErrors(error);
+                await login({
+                    email: data.email,
+                    password: data.password,
+                });
+            } catch (error) {
+                if (error instanceof Yup.ValidationError) {
+                    const errors = getValidationErrors(error);
 
-                formRef.current?.setErrors(errors);
-            } else {
-                Alert.alert('Something went wrong', "Couldn't login");
+                    formRef.current?.setErrors(errors);
+                } else {
+                    Alert.alert('Something went wrong', "Couldn't login");
+                }
             }
-        }
-    }, []);
+        },
+        [login],
+    );
 
     return (
         <KeyboardAvoidingView
